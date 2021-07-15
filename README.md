@@ -9,7 +9,7 @@
 go get -u github.com/maczh/logs
 
 ## 使用范例
-```
+```go
     str := "测试"
     m := map[string]interface{}{"userid": 1,"username":"mmaacc"}
     logs.Debug("测试日志,str:{},m:{}",str,m)
