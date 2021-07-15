@@ -3,6 +3,7 @@ package logs
 import (
 	jsoniter "github.com/json-iterator/go"
 	config "github.com/maczh/mgconfig"
+	"github.com/maczh/mgtrace"
 	"reflect"
 	"strconv"
 	"strings"
@@ -65,7 +66,11 @@ func OutPrint(format string, v []interface{}) string {
 		}
 		format = strings.Replace(format, "{}", str, 1)
 	}
-	return "logs|" + format
+	traceId := mgtrace.GetRequestId()
+	if traceId != "" {
+		format = "[" + traceId + "] " + format
+	}
+	return format
 }
 
 func Debug(format string, v ...interface{}) {
