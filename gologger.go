@@ -1,6 +1,9 @@
 package logs
 
-import "github.com/maczh/mgconfig"
+import (
+	"fmt"
+	"github.com/maczh/mgconfig"
+)
 
 const (
 	CONSOLE       string = "console"
@@ -18,9 +21,9 @@ func GetLogger(selector ...string) GoLogger {
 	logFileName := mgconfig.GetConfigString("go.logger.file")
 	if len(selector) == 0 {
 		if logFileName != "" {
-			selector = []string{"console", "file"}
+			selector = []string{CONSOLE, FILE}
 		} else {
-			selector = []string{"console"}
+			selector = []string{CONSOLE}
 		}
 	}
 	loggers := make([]Logger, 0)
@@ -31,6 +34,7 @@ func GetLogger(selector ...string) GoLogger {
 		case FILE:
 			if logFileName != "" {
 				loggers = append(loggers, Logger{FILE, logFileName})
+				fmt.Println("添加文件日志输出" + logFileName)
 			}
 		}
 	}

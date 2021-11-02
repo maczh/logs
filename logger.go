@@ -20,10 +20,13 @@ type LogInstance struct {
 	LoggerInit Logger
 }
 
-var logger = GetLogger()
+var logger GoLogger
 var logLevel = "debug"
 
 func initConfig() {
+	l := config.GetConfigString("go.logger.out")
+	loggers := strings.Split(l, ",")
+	logger = GetLogger(loggers...)
 	level := config.GetConfigString("go.logger.level")
 	if level != "" {
 		logLevel = level
