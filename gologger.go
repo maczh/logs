@@ -1,7 +1,6 @@
 package logs
 
 import (
-	"fmt"
 	"github.com/maczh/mgconfig"
 )
 
@@ -34,7 +33,6 @@ func GetLogger(selector ...string) GoLogger {
 		case FILE:
 			if logFileName != "" {
 				loggers = append(loggers, Logger{FILE, logFileName})
-				fmt.Println("添加文件日志输出" + logFileName)
 			}
 		}
 	}
