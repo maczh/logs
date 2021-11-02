@@ -9,6 +9,7 @@ import (
 
 func FilePrinter(log LogInstance, packageName string, fileName string, lineNumber int, funcName string, time time.Time) {
 	logFileName := log.LoggerInit.Location + "." + time.Format("2006-01-02") + ".log"
+	fmt.Printf("记录日志文件:%s\n", logFileName)
 	basePath := path.Dir(logFileName)
 	filePath := path.Base(logFileName)
 
