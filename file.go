@@ -8,10 +8,7 @@ import (
 )
 
 func FilePrinter(log LogInstance, packageName string, fileName string, lineNumber int, funcName string, time time.Time) {
-	logFileName := log.LoggerInit.Location
-	if logFileName == "" {
-		logFileName = "log.txt"
-	}
+	logFileName := log.LoggerInit.Location + "." + time.Format("2006-01-02") + ".log"
 	basePath := path.Dir(logFileName)
 	filePath := path.Base(logFileName)
 

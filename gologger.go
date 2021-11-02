@@ -1,5 +1,7 @@
 package logs
 
+import "github.com/maczh/mgconfig"
+
 const (
 	CONSOLE       string = "console"
 	FILE          string = "file"
@@ -9,44 +11,76 @@ const (
 )
 
 type GoLogger struct {
-	Logger
+	Loggers []Logger
 }
 
 func GetLogger(selector ...string) GoLogger {
+	logFileName := mgconfig.GetConfigString("go.logger.file")
 	if len(selector) == 0 {
-		return GoLogger{Logger{CONSOLE, ColoredLog}}
+		if logFileName != "" {
+			selector = []string{"console", "file"}
+		} else {
+			selector = []string{"console"}
+		}
 	}
-	return GoLogger{Logger{selector[0], selector[1]}}
+	loggers := make([]Logger, 0)
+	for _, sel := range selector {
+		switch sel {
+		case CONSOLE:
+			loggers = append(loggers, Logger{CONSOLE, ColoredLog})
+		case FILE:
+			if logFileName != "" {
+				loggers = append(loggers, Logger{FILE, logFileName})
+			}
+		}
+	}
+	return GoLogger{loggers}
 }
 
 func (log GoLogger) Log(message string) {
-	logPrinter(LogInstance{LogType: "LOG", Message: message, LoggerInit: log.Logger})
+	for _, logger := range log.Loggers {
+		logPrinter(LogInstance{LogType: "LOG", Message: message, LoggerInit: logger})
+	}
 }
 
 func (log GoLogger) Message(message string) {
-	logPrinter(LogInstance{LogType: "MSG", Message: message, LoggerInit: log.Logger})
+	for _, logger := range log.Loggers {
+		logPrinter(LogInstance{LogType: "MSG", Message: message, LoggerInit: logger})
+	}
 }
 
 func (log GoLogger) Info(message string) {
-	logPrinter(LogInstance{LogType: "INF", Message: message, LoggerInit: log.Logger})
+	for _, logger := range log.Loggers {
+		logPrinter(LogInstance{LogType: "INF", Message: message, LoggerInit: logger})
+	}
 }
 
 func (log GoLogger) Warn(message string) {
-	logPrinter(LogInstance{LogType: "WRN", Message: message, LoggerInit: log.Logger})
+	for _, logger := range log.Loggers {
+		logPrinter(LogInstance{LogType: "WRN", Message: message, LoggerInit: logger})
+	}
 }
 
 func (log GoLogger) Debug(message string) {
-	logPrinter(LogInstance{LogType: "DBG", Message: message, LoggerInit: log.Logger})
+	for _, logger := range log.Loggers {
+		logPrinter(LogInstance{LogType: "DBG", Message: message, LoggerInit: logger})
+	}
 }
 
 func (log GoLogger) Error(message string) {
-	logPrinter(LogInstance{LogType: "ERR", Message: message, LoggerInit: log.Logger})
+	for _, logger := range log.Loggers {
+		logPrinter(LogInstance{LogType: "ERR", Message: message, LoggerInit: logger})
+	}
 }
 
 func (log GoLogger) Fatal(message string) {
-	logPrinter(LogInstance{LogType: "CRT", Message: message, LoggerInit: log.Logger})
+	for _, logger := range log.Loggers {
+		logPrinter(LogInstance{LogType: "CRT", Message: message, LoggerInit: logger})
+	}
 }
 
 func (log GoLogger) ReplaceMessage(message string) {
-	logPrinter(LogInstance{LogType: "RSS", Message: message, LoggerInit: log.Logger})
+	for _, logger := range log.Loggers {
+		logPrinter(LogInstance{LogType: "RSS", Message: message, LoggerInit: logger})
+	}
 }
